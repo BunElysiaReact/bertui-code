@@ -1,0 +1,31 @@
+{
+"name": "bertui-code",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./bertui-code.css": {
+      "import": "./dist/bertui-code.css",
+      "types": "./dist/bertui-code.css.d.ts"
+    }
+  },
+  "files": ["dist"],
+
+  "scripts": {
+    "build": "bun build src/index.js --outdir dist --target browser --format esm --minify --external react --external fs --external path",
+    "dev": "bun build src/index.js --outdir dist --target browser --format esm --watch --external react --external fs --external path"
+  },
+
+  "keywords": ["react", "syntax-highlighting", "bertui", "code"],
+  "author": "Your Name",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^18.0.0"
+  }
+}
+
