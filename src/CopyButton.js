@@ -1,6 +1,10 @@
+// TOP OF EVERY FILE - NO EXCEPTIONS!
+/** @jsx React.createElement */
+/** @jsxFrag React.Fragment */
+
 import React, { useState } from 'react';
 
-export function CopyButton({ code, themeColors = {} }) {
+export function CopyButton({ code }) {
   const [copied, setCopied] = useState(false);
   
   const handleCopy = async () => {
@@ -9,7 +13,6 @@ export function CopyButton({ code, themeColors = {} }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      // Fallback for older browsers
       const textarea = document.createElement('textarea');
       textarea.value = code;
       textarea.style.position = 'fixed';
@@ -23,30 +26,9 @@ export function CopyButton({ code, themeColors = {} }) {
     }
   };
   
-  const buttonStyle = {
-    background: copied ? (themeColors.success || '#2e7d32') : (themeColors.button || '#3d3d3d'),
-    border: 'none',
-    color: themeColors.buttonText || '#d4d4d4',
-    cursor: 'pointer',
-    padding: '4px 12px',
-    borderRadius: '4px',
-    fontSize: '12px',
-    transition: 'all 0.2s'
-  };
-  
   return React.createElement('button', {
     onClick: handleCopy,
-    title: copied ? 'Copied!' : 'Copy code',
-    style: buttonStyle,
-    onMouseEnter: (e) => {
-      if (!copied) {
-        e.currentTarget.style.background = themeColors.buttonHover || '#4d4d4d';
-      }
-    },
-    onMouseLeave: (e) => {
-      if (!copied) {
-        e.currentTarget.style.background = themeColors.button || '#3d3d3d';
-      }
-    }
+    className: `bertui-copy-button ${copied ? 'copied' : ''}`,
+    title: copied ? 'Copied!' : 'Copy code'
   }, copied ? '✓' : '📋');
 }

@@ -1,3 +1,5 @@
+# 📁 **README.md - v1.0.1 Release**
+
 # 🎨 bertui-code
 
 **Zero-config syntax highlighting for React. Built exclusively for the BertUI ecosystem.**
@@ -5,10 +7,11 @@
 [![BertUI Compatible](https://img.shields.io/badge/BertUI-Compatible-10b981)](https://bertui.dev)
 [![Zero Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-1.0.1-blue)](package.json)
 
 The simplest way to add beautiful, functional code blocks to your BertUI applications. Dark theme by default, copy button included, zero configuration required.
 
-> ⚠️ **BertUI Compatibility Note:** bertui-code is built specifically for BertUI's build system. It uses ES modules and works with BertUI's transpiler. Some advanced JavaScript features may need workarounds in BertUI's JSX files.
+> ⚠️ **BertUI Compatibility Note:** bertui-code v1.0.1 is tested with BertUI's strict transpiler. See the [BertUI Compatibility](#-bertui-compatibility) section for details.
 
 ## ✨ Features
 
@@ -18,22 +21,25 @@ The simplest way to add beautiful, functional code blocks to your BertUI applica
 - **Line numbers** - Optional, beautifully aligned
 - **Inline code snippets** - Perfect for documentation
 - **20+ language support** - Auto-detection included
-- **BertUI-exclusive** - Optimized for BertUI's build system
+- **Multi-variant tabs** - Toggle between npm/pnpm/bun/yarn and more
 - **Zero dependencies** - Except React (peer dependency)
-- **Accessible** - Proper ARIA labels, keyboard navigation
+- **BertUI-certified** - Tested with BertUI's strict transpiler
 
 ## 📦 Installation
 
-```bash
-bun add bertui-code
-```
+
+bun add bertui-code@1.0.1
+# or
+npm install bertui-code@1.0.1
+# or  
+
 
 ## 🚀 Quick Start
 
-```jsx
-import { Code, InlineCode } from 'bertui-code';
 
-// Basic usage (zero config!)
+import { Code, InlineCode, CodeVariants, CodeVariant } from 'bertui-code';
+
+// Basic code block
 <Code>
   const hello = "world";
   console.log(hello);
@@ -46,299 +52,309 @@ import { Code, InlineCode } from 'bertui-code';
   }
 </Code>
 
-// Inline code in paragraphs
+// Package manager variants (NEW in v1.0.1!)
+<CodeVariants>
+  <CodeVariant label="npm">npm install bertui-code</CodeVariant>
+  <CodeVariant label="pnpm">pnpm add bertui-code</CodeVariant>
+  <CodeVariant label="bun">bun add bertui-code</CodeVariant>
+  <CodeVariant label="yarn">yarn add bertui-code</CodeVariant>
+</CodeVariants>
+
+// Inline code
 <p>
   Use the <InlineCode>useState</InlineCode> hook for state management.
 </p>
 ```
 
-## ⚠️ BertUI Compatibility Notes
+---
 
-BertUI's transpiler is lightweight and fast, but has some limitations. Here are workarounds for common issues:
+## 🎯 **NEW IN v1.0.1: Multi-Variant Code Blocks**
 
-### ✅ **DO: Use simple strings in JSX**
-```jsx
-// ✅ GOOD - Plain strings work perfectly
-<Code>
-  console.log("Hello BertUI!");
-</Code>
+Toggle between different versions of the same code snippet with zero config:
 
-// ✅ GOOD - Pre-defined variables
-const myCode = 'function test() {\n  return "works";\n}';
+
+<CodeVariants theme="dark" defaultVariant="bun">
+  <CodeVariant label="npm">npm run dev</CodeVariant>
+  <CodeVariant label="pnpm">pnpm dev</CodeVariant>
+  <CodeVariant label="bun">bun dev</CodeVariant>
+  <CodeVariant label="yarn">yarn dev</CodeVariant>
+
+
+**Features:**
+- ✅ Auto-generates tabs from labels
+- ✅ Theme-aware styling (dark/light/pink)
+- ✅ Sticky tabs for long docs (`stickyTabs={true}`)
+- ✅ Configurable tab position (`tabPosition="bottom"`)
+- ✅ Keyboard accessible, ARIA compliant
+
+---
+
+## ⚠️ **BertUI Compatibility (CRITICAL)**
+
+bertui-code v1.0.1 is **certified for BertUI's strict transpiler**. Follow these rules and it will **never crash**:
+
+
+// ✅ GOOD - BertUI never looks inside string variables
+const myCode = 
+'function hello(name) {\n' +
+'  return "Hello " + name + "!";\n' +
+'}';
+
 <Code>{myCode}</Code>
-```
 
-### ❌ **AVOID: Complex template literals in JSX**
-```jsx
-// ❌ BAD - BertUI may freak out with nested backticks
+// ✅ GOOD - Even JSX/TypeScript works in strings!
+const tsCode = 
+'interface User {\n' +
+'  id: string;\n' +
+'  name: string;\n' +
+'}\n';
+
+<Code language="typescript">{tsCode}</Code>
+
+
+### ❌ **NEVER: Use template literals in JSX (ALWAYS CRASHES)**
+
+// ❌ BAD - BertUI WILL crash with "Expected } but found :"
 <Code>
-  {`function test() {
-    return \`template literal\`;
+  {`function hello() {
+    return "world";
   }`}
 </Code>
-
-// ✅ GOOD - Escape properly or use variables
-const code = 'function test() {\n  return `template literal`;\n}';
-<Code>{code}</Code>
 ```
 
-### ✅ **Best Practice: Store code in variables**
-```jsx
-// Store complex code in variables
-const exampleCode = `function complex() {
-  const data = { key: "value" };
-  return \`Template: \${data.key}\`;
-}`;
+### ✅ **DO: Use React.createElement pattern**
 
-// Then use in JSX
-<Code>{exampleCode}</Code>
-```
+// ✅ GOOD - Works in BertUI
+import React from 'react';
 
-## 🎨 Themes & Colors
+export default function Page() {
+  return React.createElement(Code, {
+    language: 'javascript',
+    showLineNumbers: true
+  }, 'const x = 1;');
+
+
+
+// ✅ GOOD - Always use ={true}
+<CodeVariants stickyTabs={true}>
+
+// ❌ BAD - BertUI crashes on shorthand
+
+
+### 📋 **BertUI Compatibility Checklist**
+
+| Pattern | Status | Why |
+|---------|--------|-----|
+| `const code = '...'` | ✅ **SAFE** | Strings are opaque to BertUI |
+| `` <Code>{`code`}</Code> `` | ❌ **CRASH** | BertUI parses template literal content |
+| `language="typescript"` | ⚠️ **MAY CRASH** | Only safe if code is in string variable |
+| `stickyTabs={true}` | ✅ **SAFE** | Explicit value works |
+| `stickyTabs` | ❌ **CRASH** | Shorthand props not supported |
+| `React.createElement` | ✅ **SAFE** | No JSX transform needed |
+
+---
+
+## 🎨 **Themes & Colors**
 
 ### Built-in Themes
-
 ```jsx
-// Dark (default)
-<Code theme="dark">console.log("Dark theme");</Code>
-
-// Light
-<Code theme="light">// Perfect for docs</Code>
-
-// Pink
-<Code theme="pink">// For pink lovers! 🎀</Code>
+<Code theme="dark">   // Default
+<Code theme="light">  // Light mode
+<Code theme="pink">   // Pink mode
 ```
 
 ### Custom Colors
 
-```jsx
-<Code
-  theme="custom"
+<Code 
   colors={{
     background: '#0a0a0a',
     text: '#00ff00',
     header: '#1a1a1a',
     border: '#00ff00',
     meta: '#00ff00',
-    button: '#00ff00',
-    buttonText: '#0a0a0a',
-    success: '#00ff00'
+    button: '#00ff00'
   }}
 >
   // Custom hacker theme
 </Code>
-```
 
-## 📖 API Reference
+---
+
+## 📖 **API Reference**
 
 ### `<Code />` Component
-
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `children` | `string` | **Required** | The code to display |
-| `language` | `string` | `'javascript'` | Programming language (`'auto'` for detection) |
-| `theme` | `'dark' \| 'light' \| 'pink' \| 'custom'` | `'dark'` | Color theme |
-| `colors` | `Object` | `{}` | Custom colors for `theme="custom"` |
+| `language` | `string` | `'javascript'` | Programming language |
+| `theme` | `'dark' \| 'light' \| 'pink'` | `'dark'` | Color theme |
+| `colors` | `Object` | `{}` | Custom color overrides |
 | `showLineNumbers` | `boolean` | `false` | Show line numbers |
-| `showCopyButton` | `boolean` | `true` | Show copy-to-clipboard button |
+| `showCopyButton` | `boolean` | `true` | Show copy button |
 | `className` | `string` | `''` | Additional CSS classes |
 
-### `<InlineCode />` Component
+### `<CodeVariants />` Component (NEW)
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `CodeVariant[]` | **Required** | Array of variants |
+| `theme` | `'dark' \| 'light' \| 'pink'` | `'dark'` | Color theme |
+| `defaultVariant` | `number \| string` | `0` | Default tab by index or label |
+| `stickyTabs` | `boolean` | `false` | Make tabs sticky on scroll |
+| `tabPosition` | `'top' \| 'bottom'` | `'top'` | Tab bar position |
+| `showCopyButton` | `boolean` | `true` | Show copy button |
+| `colors` | `Object` | `{}` | Custom colors for code |
+| `tabColors` | `Object` | `{}` | Custom colors for tabs |
 
+### `<CodeVariant />` Component (NEW)
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `string` | **Required** | The code for this variant |
+| `label` | `string` | **Required** | Tab label (npm, pnpm, etc) |
+| `language` | `string` | `'javascript'` | Language for this variant |
+| `showLineNumbers` | `boolean` | `false` | Show line numbers |
+
+### `<InlineCode />` Component
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `children` | `string` | **Required** | The inline code |
 | `theme` | `'dark' \| 'light' \| 'pink'` | `'dark'` | Color theme |
 
-### `detectLanguage(code: string): string`
+---
 
-Utility function to detect programming language from code content.
+## 💡 **Best Practices for BertUI**
 
-## 🌐 Language Support
+### 1. **Store all code examples in string variables**
 
-bertui-code supports **20+ programming languages** with auto-detection:
+// code-examples.js
+export const npmExample = 'npm install bertui-code';
+export const jsExample = 
+'function add(a, b) {\n' +
+'  return a + b;\n' +
+'}';
 
-- **Web**: JavaScript, TypeScript, JSX, HTML, CSS, JSON
-- **Backend**: Python, Ruby, PHP, Java, Go, Rust, C, C++, C#
-- **Data**: SQL, YAML, XML
-- **Shell**: Bash, Shell, PowerShell
-- **Other**: Markdown, Swift, Kotlin, Dart
+// page.jsx
+import { jsExample } from './code-examples.js';
+<Code>{jsExample}</Code>
 
-```jsx
-// Auto-detection
-<Code language="auto">
-  def hello():
-      print("Auto-detected as Python!")
-</Code>
 
-// Manual specification
-<Code language="rust">
-  fn main() {
-      println!("Hello Rust!");
-  }
-</Code>
-```
+### 2. **Use string concatenation for readability**
 
-## 🔧 Advanced Usage Examples
+const longCode = 
+'import React from "react";\n' +
+'\n' +
+'export function Button({ children }) {\n' +
+'  return (\n' +
+'    <button className="btn">\n' +
+'      {children}\n' +
+'    </button>\n' +
+'  );\n' +
+'}\n';
 
-### Documentation Page (BertUI-safe)
-```jsx
-import React from 'react';
-import { Code, InlineCode } from 'bertui-code';
 
-// Store code in variables (BertUI-safe pattern)
-const apiExample = 'function fetchData(url) {\n  return fetch(url).then(r => r.json());\n}';
+### 3. **Keep TypeScript in .ts files**
 
-const errorHandling = `interface Result<T> {
-  data: T | null;
-  error: string | null;
-}
+// ✅ GOOD - In a .ts file
+export const tsCode = 'const name: string = "John";';
 
-async function getUser(): Promise<Result<User>> {
-  try {
-    const response = await fetch('/api/user');
-    return { data: await response.json(), error: null };
-  } catch (error) {
-    return { data: null, error: error.message };
-  }
-}`;
+// ❌ BAD - In a .jsx file
+const tsCode = 'const name: string = "John";'; // BertUI may crash!
 
-export default function Documentation() {
-  return (
-    <article style={{ padding: '2rem' }}>
-      <h1>API Reference</h1>
-      
-      <p>
-        Import the component: <InlineCode>import {'{ Code }'} from 'bertui-code'</InlineCode>
-      </p>
-      
-      <h2>Basic Example</h2>
-      <Code showLineNumbers>
-        {apiExample}
-      </Code>
-      
-      <h2>Error Handling</h2>
-      <Code language="typescript" theme="light">
-        {errorHandling}
-      </Code>
-    </article>
-  );
-}
-```
 
-### Interactive Component (BertUI-safe)
-```jsx
-import React, { useState } from 'react';
+### 4. **Test your code blocks**
+
+// test-page.jsx - Create a test page to verify BertUI compatibility
 import { Code } from 'bertui-code';
+const testCode = 'console.log("Hello BertUI!");';
 
-export default function InteractiveDemo() {
-  const [theme, setTheme] = useState('dark');
-  
-  // Store dynamic code in variable
-  const dynamicCode = `// Current theme: ${theme}
-const user = {
-  name: "Developer",
-  preferences: {
-    theme: "${theme}",
-    timestamp: new Date().toISOString()
-  }
-};
-
-console.log(\`Hello \${user.name}!\`);`;
-
-  return (
-    <div style={{ padding: '1rem' }}>
-      <div style={{ marginBottom: '1rem' }}>
-        <label>
-          Select Theme: 
-          <select 
-            value={theme} 
-            onChange={(e) => setTheme(e.target.value)}
-            style={{ marginLeft: '0.5rem', padding: '0.25rem' }}
-          >
-            <option value="dark">Dark</option>
-            <option value="light">Light</option>
-            <option value="pink">Pink</option>
-          </select>
-        </label>
-      </div>
-      
-      <Code theme={theme} showLineNumbers>
-        {dynamicCode}
-      </Code>
-    </div>
-  );
+export default function TestPage() {
+  return React.createElement(Code, {}, testCode);
 }
-```
 
-## 🛠️ Troubleshooting BertUI Issues
 
-### Problem: "Unexpected return" or compilation errors
-**Solution:** BertUI's transpiler sometimes struggles with:
-- Nested template literals in JSX
-- Complex string interpolation
-- Certain JavaScript syntax in JSX attributes
+---
 
-**Workaround:**
-```jsx
-// ❌ Problematic
-<Code>
-  {`function test() {
-    return \`Complex \${expression}\`;
-  }`}
-</Code>
+## 📚 **Examples**
 
-// ✅ Solution - Use variables
-const safeCode = 'function test() {\n  return `Complex ${expression}`;\n}';
-<Code>{safeCode}</Code>
-```
+### Package Manager Installers
 
-### Problem: Import not working
-**Solution:** Make sure:
-1. Package is installed : `bun install  bertui-code`
-2. BertUI restarted after installing 
-3. No cache issues: `rm -rf .bertui` then restart
+<CodeVariants theme="dark" defaultVariant="bun">
+  <CodeVariant label="npm">npm install bertui-code</CodeVariant>
+  <CodeVariant label="pnpm">pnpm add bertui-code</CodeVariant>
+  <CodeVariant label="bun">bun add bertui-code</CodeVariant>
+  <CodeVariant label="yarn">yarn add bertui-code</CodeVariant>
+</CodeVariants>
 
-### Problem: Colors not applying
-**Solution:** Ensure custom colors object has all required properties:
-```jsx
-// Complete custom colors object
-colors={{
-  background: '#...',
-  text: '#...',
-  header: '#...',
-  border: '#...',
-  meta: '#...',
-  button: '#...',
-  buttonHover: '#...',
-  buttonText: '#...',
-  success: '#...'
-}}
-```
 
-## 📁 Project Structure
+### Language Comparison
 
-```
+<CodeVariants theme="light">
+  <CodeVariant label="JavaScript" language="javascript">
+    {javascriptExample}
+  </CodeVariant>
+  <CodeVariant label="TypeScript" language="typescript">
+    {typescriptExample}
+  </CodeVariant>
+  <CodeVariant label="Python" language="python">
+    {pythonExample}
+  </CodeVariant>
+</CodeVariants>
+
+
+### API Examples
+
+<CodeVariants theme="dark" tabPosition="bottom" stickyTabs={true}>
+  <CodeVariant label="cURL" language="bash">{curlExample}</CodeVariant>
+  <CodeVariant label="fetch" language="javascript">{fetchExample}</CodeVariant>
+  <CodeVariant label="axios" language="javascript">{axiosExample}</CodeVariant>
+</CodeVariants>
+
+
+---
+
+## 🐛 **Known Issues & Workarounds**
+
+### Issue: BertUI crashes with `Expected "}" but found ":"`
+**Cause:** TypeScript syntax in .jsx file or template literal in JSX
+**Fix:** Move code to string variable outside component
+
+### Issue: React/jsx-dev-runtime not found
+**Cause:** BertUI doesn't support React 18 automatic JSX runtime
+**Fix:** Use `React.createElement` or add `/** @jsx React.createElement */`
+
+### Issue: Shorthand props crash
+**Cause:** BertUI doesn't support `{stickyTabs}` shorthand
+**Fix:** Always use `stickyTabs={true}`
+
+---
+
+## 📦 **Project Structure**
+
 bertui-code/
 ├── src/
-│   ├── Code.js          # Main component (BertUI-safe JS)
-│   ├── CopyButton.js    # Copy button component
-│   ├── InlineCode.js    # Inline code component
-│   └── index.js         # Main exports
-├── dist/
-│   └── index.js         # Built bundle (ES module)
-├── package.json
-└── README.md
-```
+│   ├── Code.js           # Main code block component
+│   ├── CodeVariants.js   # Multi-variant tabs (NEW)
+│   ├── CodeVariant.js    # Individual variant (NEW)
+│   ├── CopyButton.js     # Copy button component
+│   ├── InlineCode.js     # Inline code component
+│   ├── ThemeProvider.js  # Theme context (optional)
+│   └── index.js          # Main exports
+├── dist/                 # Built files
+├── package.json          # v1.0.1
+└── README.md            # You are here
 
-## 🤝 Compatibility
 
-- **BertUI**: ✅ Fully compatible (built specifically for BertUI)
+---
+
+## 🤝 **Compatibility**
+
+- **BertUI**: ✅ v1.0.1 certified - Tested with strict transpiler
 - **React**: ✅ 18.0.0+ (peer dependency)
-- **Browsers**: ✅ Chrome, Firefox, Safari, Edge (modern)
-- **Other Frameworks**: ❌ Not compatible (BertUI-exclusive optimizations)
+- **Browsers**: ✅ Chrome, Firefox, Safari, Edge
+- **Bun**: ✅ Recommended package manager
 
-## 📄 License
+---
+
+## 📄 **License**
 
 MIT © Pease Ernest
 
@@ -347,13 +363,17 @@ MIT © Pease Ernest
 <div align="center">
   <p>
     <strong>Part of the BertUI ecosystem</strong><br/>
-    Built with ❤️ for developers who value simplicity and beauty
+    Built with ❤️ for developers who value simplicity and speed
   </p>
   
   <p>
-    <a href="https://bertui-docswebsite.pages.dev/">BertUI Website</a> •
-    <a href="https://github.com/BunElysiaReact/bertui-code.git">GitHub</a> •
-    <a href="https://npmjs.com/package/bertui-code">npm</a>
+    <a href="https://github.com/yourusername/bertui-code">GitHub</a> •
+    <a href="https://npmjs.com/package/bertui-code">npm</a> •
+    <a href="#-bertui-compatibility">BertUI Compatibility</a>
+  </p>
+  
+  <p>
+    <sub>v1.0.1 • Zero-config • BertUI-certified</sub>
   </p>
 </div>
 ```

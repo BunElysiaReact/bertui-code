@@ -1,3 +1,7 @@
+// TOP OF EVERY FILE - NO EXCEPTIONS!
+/** @jsx React.createElement */
+/** @jsxFrag React.Fragment */
+
 import React from 'react';
 import { CopyButton } from './CopyButton.js';
 
@@ -7,51 +11,43 @@ export function Code({
   showLineNumbers = false,
   showCopyButton = true,
   className = '',
-  // NEW: Color customization props
-  theme = 'dark', // 'dark' | 'light' | 'custom'
-  colors = {}
+  theme
 }) {
   const lines = children.split('\n');
   const lineCount = lines.length;
   
-  // Theme-based colors
-  const themeColors = getThemeColors(theme, colors);
-  
   return React.createElement('div', {
     className: `bertui-code ${className}`,
+    'data-theme': theme,
     style: {
-      background: themeColors.background,
       borderRadius: '8px',
-      fontFamily: "'Menlo', 'Monaco', monospace",
+      fontFamily: 'Menlo, Monaco, monospace',
       fontSize: '14px',
       margin: '1rem 0',
-      overflow: 'hidden',
-      color: themeColors.text
+      overflow: 'hidden'
     }
   }, [
     React.createElement('div', {
       key: 'header',
+      className: 'bertui-code-header',
       style: {
-        background: themeColors.header,
         padding: '8px 16px',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        borderBottom: `1px solid ${themeColors.border}`
+        alignItems: 'center'
       }
     }, [
       React.createElement('span', {
         key: 'language',
+        className: 'bertui-code-language',
         style: {
-          color: themeColors.meta,
           fontSize: '12px',
           fontWeight: '500'
         }
       }, language),
       showCopyButton && React.createElement(CopyButton, {
         key: 'copy',
-        code: children,
-        themeColors: themeColors
+        code: children
       })
     ].filter(Boolean)),
     React.createElement('div', {
@@ -63,8 +59,8 @@ export function Code({
     }, [
       showLineNumbers && React.createElement('div', {
         key: 'lines',
+        className: 'bertui-line-numbers',
         style: {
-          color: themeColors.meta,
           padding: '0 16px',
           textAlign: 'right',
           userSelect: 'none',
@@ -81,6 +77,7 @@ export function Code({
       )),
       React.createElement('pre', {
         key: 'pre',
+        className: 'bertui-code-pre',
         style: {
           margin: 0,
           padding: '0 16px',
@@ -90,7 +87,6 @@ export function Code({
       }, React.createElement('code', {
         className: `language-${language}`,
         style: {
-          color: themeColors.text,
           background: 'transparent',
           fontFamily: 'inherit'
         }
@@ -99,53 +95,7 @@ export function Code({
   ]);
 }
 
-// Helper function to get theme colors
-function getThemeColors(theme, customColors = {}) {
-  const themes = {
-    dark: {
-      background: '#1e1e1e',
-      header: '#2d2d2d',
-      text: '#d4d4d4',
-      meta: '#858585',
-      border: '#3d3d3d',
-      button: '#3d3d3d',
-      buttonHover: '#4d4d4d',
-      buttonText: '#d4d4d4',
-      success: '#2e7d32'
-    },
-    light: {
-      background: '#ffffff',
-      header: '#f3f4f6',
-      text: '#374151',
-      meta: '#6b7280',
-      border: '#d1d5db',
-      button: '#e5e7eb',
-      buttonHover: '#d1d5db',
-      buttonText: '#374151',
-      success: '#10b981'
-    },
-    pink: {
-      background: '#fdf2f8',
-      header: '#fce7f3',
-      text: '#831843',
-      meta: '#be185d',
-      border: '#f472b6',
-      button: '#f472b6',
-      buttonHover: '#ec4899',
-      buttonText: '#ffffff',
-      success: '#10b981'
-    }
-  };
-  
-  // Start with selected theme
-  const base = themes[theme] || themes.dark;
-  
-  // Override with custom colors if provided
-  return { ...base, ...customColors };
-}
-
-// NEW: Language detection helper
-function detectLanguage(code) {
+export function detectLanguage(code) {
   const patterns = {
     javascript: /(\bconsole\.|\bfunction\b|\bconst\b|\blet\b|\bvar\b|\bimport\b|\bexport\b)/,
     typescript: /(:\s*\w+\s*[=;]|\binterface\b|\btype\b|\bnamespace\b)/,
@@ -178,9 +128,3 @@ function detectLanguage(code) {
   
   return 'plaintext';
 }
-
-// Export the helper function
-export { detectLanguage };
-
-// Export the getThemeColors function too if needed
-export { getThemeColors };

@@ -1,0 +1,164 @@
+/* bertui-code.css - CSS Custom Properties Version */
+
+:root {
+  /* Dark theme (default) */
+  --bertui-bg: #1e1e1e;
+  --bertui-header: #2d2d2d;
+  --bertui-text: #d4d4d4;
+  --bertui-meta: #858585;
+  --bertui-border: #3d3d3d;
+  --bertui-button: #3d3d3d;
+  --bertui-button-hover: #4d4d4d;
+  --bertui-button-text: #d4d4d4;
+  --bertui-success: #2e7d32;
+  
+  /* Syntax colors */
+  --bertui-keyword: #569cd6;
+  --bertui-string: #ce9178;
+  --bertui-comment: #6a9955;
+  --bertui-function: #dcdcaa;
+  --bertui-number: #b5cea8;
+  
+  /* Tab colors for CodeVariants */
+  --bertui-tab-bar: #2d2d2d;
+  --bertui-tab-active: #1e1e1e;
+  --bertui-tab-active-text: #ffffff;
+  --bertui-tab-inactive: #858585;
+  --bertui-tab-accent: #3b82f6;
+  --bertui-tab-hover: #3d3d3d;
+}
+
+/* Light theme - just override the variables! */
+[data-bertui-theme="light"] {
+  --bertui-bg: #ffffff;
+  --bertui-header: #f3f4f6;
+  --bertui-text: #374151;
+  --bertui-meta: #6b7280;
+  --bertui-border: #d1d5db;
+  --bertui-button: #e5e7eb;
+  --bertui-button-hover: #d1d5db;
+  --bertui-button-text: #374151;
+  --bertui-success: #10b981;
+  
+  --bertui-keyword: #059669;
+  --bertui-string: #dc2626;
+  --bertui-comment: #6b7280;
+  --bertui-function: #2563eb;
+  --bertui-number: #7c3aed;
+  
+  --bertui-tab-bar: #f3f4f6;
+  --bertui-tab-active: #ffffff;
+  --bertui-tab-active-text: #111827;
+  --bertui-tab-inactive: #6b7280;
+  --bertui-tab-accent: #3b82f6;
+  --bertui-tab-hover: #e5e7eb;
+}
+
+/* Pink theme */
+[data-bertui-theme="pink"] {
+  --bertui-bg: #fdf2f8;
+  --bertui-header: #fce7f3;
+  --bertui-text: #831843;
+  --bertui-meta: #be185d;
+  --bertui-border: #f472b6;
+  --bertui-button: #f472b6;
+  --bertui-button-hover: #ec4899;
+  --bertui-button-text: #ffffff;
+  --bertui-success: #10b981;
+  
+  --bertui-keyword: #db2777;
+  --bertui-string: #ea580c;
+  --bertui-comment: #a855f7;
+  --bertui-function: #9333ea;
+  --bertui-number: #7e22ce;
+  
+  --bertui-tab-bar: #fce7f3;
+  --bertui-tab-active: #ffffff;
+  --bertui-tab-active-text: #831843;
+  --bertui-tab-inactive: #be185d;
+  --bertui-tab-accent: #ec4899;
+  --bertui-tab-hover: #fbcfe8;
+}
+
+/* System preference - automatically follows OS */
+@media (prefers-color-scheme: dark) {
+  [data-bertui-theme="system"] {
+    --bertui-bg: #1e1e1e;
+    --bertui-header: #2d2d2d;
+    --bertui-text: #d4d4d4;
+    /* ... all dark theme variables ... */
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  [data-bertui-theme="system"] {
+    --bertui-bg: #ffffff;
+    --bertui-header: #f3f4f6;
+    --bertui-text: #374151;
+    /* ... all light theme variables ... */
+  }
+}
+
+/* Components use the variables - NO HARDCODED COLORS! */
+.bertui-code {
+  background: var(--bertui-bg);
+  color: var(--bertui-text);
+  border: 1px solid var(--bertui-border);
+}
+
+.bertui-code-header {
+  background: var(--bertui-header);
+  border-bottom: 1px solid var(--bertui-border);
+}
+
+.bertui-copy-button {
+  background: var(--bertui-button);
+  color: var(--bertui-button-text);
+}
+
+.bertui-copy-button:hover {
+  background: var(--bertui-button-hover);
+}
+
+/* Syntax highlighting */
+.token.keyword { color: var(--bertui-keyword); }
+.token.string { color: var(--bertui-string); }
+.token.comment { color: var(--bertui-comment); }
+.token.function { color: var(--bertui-function); }
+.token.number { color: var(--bertui-number); }
+
+/* CodeVariants tabs */
+.bertui-code-variants {
+  background: var(--bertui-bg);
+  border: 1px solid var(--bertui-border);
+}
+
+.variant-tabs {
+  background: var(--bertui-tab-bar);
+  border-bottom: 1px solid var(--bertui-border);
+}
+
+.variant-tab.active {
+  background: var(--bertui-tab-active);
+  color: var(--bertui-tab-active-text);
+  border-bottom-color: var(--bertui-tab-accent);
+}
+
+.variant-tab:not(.active) {
+  color: var(--bertui-tab-inactive);
+}
+
+.variant-tab:not(.active):hover {
+  background: var(--bertui-tab-hover);
+  color: var(--bertui-tab-active-text);
+}
+
+/* Smooth transitions */
+.bertui-code,
+.bertui-code *,
+.bertui-code-variants,
+.bertui-code-variants * {
+  transition: background-color 0.2s ease,
+              color 0.2s ease,
+              border-color 0.2s ease;
+}
