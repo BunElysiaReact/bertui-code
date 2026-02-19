@@ -57,10 +57,11 @@ export function CodeThemeProvider({
     });
   };
   
-  return (
-    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
+  // FIXED: Use React.createElement directly
+  return React.createElement(
+    ThemeContext.Provider,
+    { value: { theme, setTheme, toggleTheme } },
+    children
   );
 }
 
