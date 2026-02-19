@@ -1,6 +1,6 @@
 {
   "name": "bertui-code",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,12 +15,19 @@
       "require": "./dist/bertui-code.css"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "bun run build.js",
     "dev": "bun build src/index.js --outdir dist --target browser --format esm --external react --external react/jsx-runtime --external react/jsx-dev-runtime --watch"
   },
-  "keywords": ["react", "syntax-highlighting", "bertui", "code"],
+  "keywords": [
+    "react",
+    "syntax-highlighting",
+    "bertui",
+    "code"
+  ],
   "author": "Your Name",
   "license": "MIT",
   "peerDependencies": {
