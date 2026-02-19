@@ -1,3 +1,4 @@
+
 # 📁 **README.md - v1.0.1 Release**
 
 # 🎨 bertui-code
@@ -27,16 +28,19 @@ The simplest way to add beautiful, functional code blocks to your BertUI applica
 
 ## 📦 Installation
 
-
+```bash
 bun add bertui-code@1.0.1
 # or
 npm install bertui-code@1.0.1
-# or  
-
+# or
+pnpm add bertui-code@1.0.1
+# or
+yarn add bertui-code@1.0.1
+```
 
 ## 🚀 Quick Start
 
-
+```jsx
 import { Code, InlineCode, CodeVariants, CodeVariant } from 'bertui-code';
 
 // Basic code block
@@ -72,13 +76,14 @@ import { Code, InlineCode, CodeVariants, CodeVariant } from 'bertui-code';
 
 Toggle between different versions of the same code snippet with zero config:
 
-
+```jsx
 <CodeVariants theme="dark" defaultVariant="bun">
   <CodeVariant label="npm">npm run dev</CodeVariant>
   <CodeVariant label="pnpm">pnpm dev</CodeVariant>
   <CodeVariant label="bun">bun dev</CodeVariant>
   <CodeVariant label="yarn">yarn dev</CodeVariant>
-
+</CodeVariants>
+```
 
 **Features:**
 - ✅ Auto-generates tabs from labels
@@ -93,7 +98,7 @@ Toggle between different versions of the same code snippet with zero config:
 
 bertui-code v1.0.1 is **certified for BertUI's strict transpiler**. Follow these rules and it will **never crash**:
 
-
+```jsx
 // ✅ GOOD - BertUI never looks inside string variables
 const myCode = 
 'function hello(name) {\n' +
@@ -110,10 +115,11 @@ const tsCode =
 '}\n';
 
 <Code language="typescript">{tsCode}</Code>
-
+```
 
 ### ❌ **NEVER: Use template literals in JSX (ALWAYS CRASHES)**
 
+```jsx
 // ❌ BAD - BertUI WILL crash with "Expected } but found :"
 <Code>
   {`function hello() {
@@ -124,6 +130,7 @@ const tsCode =
 
 ### ✅ **DO: Use React.createElement pattern**
 
+```jsx
 // ✅ GOOD - Works in BertUI
 import React from 'react';
 
@@ -132,14 +139,16 @@ export default function Page() {
     language: 'javascript',
     showLineNumbers: true
   }, 'const x = 1;');
+}
+```
 
-
-
+```jsx
 // ✅ GOOD - Always use ={true}
 <CodeVariants stickyTabs={true}>
 
 // ❌ BAD - BertUI crashes on shorthand
-
+<CodeVariants stickyTabs>
+```
 
 ### 📋 **BertUI Compatibility Checklist**
 
@@ -165,6 +174,7 @@ export default function Page() {
 
 ### Custom Colors
 
+```jsx
 <Code 
   colors={{
     background: '#0a0a0a',
@@ -177,6 +187,7 @@ export default function Page() {
 >
   // Custom hacker theme
 </Code>
+```
 
 ---
 
@@ -225,6 +236,7 @@ export default function Page() {
 
 ### 1. **Store all code examples in string variables**
 
+```jsx
 // code-examples.js
 export const npmExample = 'npm install bertui-code';
 export const jsExample = 
@@ -235,10 +247,11 @@ export const jsExample =
 // page.jsx
 import { jsExample } from './code-examples.js';
 <Code>{jsExample}</Code>
-
+```
 
 ### 2. **Use string concatenation for readability**
 
+```jsx
 const longCode = 
 'import React from "react";\n' +
 '\n' +
@@ -249,19 +262,23 @@ const longCode =
 '    </button>\n' +
 '  );\n' +
 '}\n';
-
+```
 
 ### 3. **Keep TypeScript in .ts files**
 
+```ts
 // ✅ GOOD - In a .ts file
 export const tsCode = 'const name: string = "John";';
+```
 
+```jsx
 // ❌ BAD - In a .jsx file
 const tsCode = 'const name: string = "John";'; // BertUI may crash!
-
+```
 
 ### 4. **Test your code blocks**
 
+```jsx
 // test-page.jsx - Create a test page to verify BertUI compatibility
 import { Code } from 'bertui-code';
 const testCode = 'console.log("Hello BertUI!");';
@@ -269,7 +286,7 @@ const testCode = 'console.log("Hello BertUI!");';
 export default function TestPage() {
   return React.createElement(Code, {}, testCode);
 }
-
+```
 
 ---
 
@@ -277,16 +294,18 @@ export default function TestPage() {
 
 ### Package Manager Installers
 
+```jsx
 <CodeVariants theme="dark" defaultVariant="bun">
   <CodeVariant label="npm">npm install bertui-code</CodeVariant>
   <CodeVariant label="pnpm">pnpm add bertui-code</CodeVariant>
   <CodeVariant label="bun">bun add bertui-code</CodeVariant>
   <CodeVariant label="yarn">yarn add bertui-code</CodeVariant>
 </CodeVariants>
-
+```
 
 ### Language Comparison
 
+```jsx
 <CodeVariants theme="light">
   <CodeVariant label="JavaScript" language="javascript">
     {javascriptExample}
@@ -298,37 +317,39 @@ export default function TestPage() {
     {pythonExample}
   </CodeVariant>
 </CodeVariants>
-
+```
 
 ### API Examples
 
+```jsx
 <CodeVariants theme="dark" tabPosition="bottom" stickyTabs={true}>
   <CodeVariant label="cURL" language="bash">{curlExample}</CodeVariant>
   <CodeVariant label="fetch" language="javascript">{fetchExample}</CodeVariant>
   <CodeVariant label="axios" language="javascript">{axiosExample}</CodeVariant>
 </CodeVariants>
-
+```
 
 ---
 
 ## 🐛 **Known Issues & Workarounds**
 
 ### Issue: BertUI crashes with `Expected "}" but found ":"`
-**Cause:** TypeScript syntax in .jsx file or template literal in JSX
+**Cause:** TypeScript syntax in .jsx file or template literal in JSX  
 **Fix:** Move code to string variable outside component
 
 ### Issue: React/jsx-dev-runtime not found
-**Cause:** BertUI doesn't support React 18 automatic JSX runtime
+**Cause:** BertUI doesn't support React 18 automatic JSX runtime  
 **Fix:** Use `React.createElement` or add `/** @jsx React.createElement */`
 
 ### Issue: Shorthand props crash
-**Cause:** BertUI doesn't support `{stickyTabs}` shorthand
+**Cause:** BertUI doesn't support `{stickyTabs}` shorthand  
 **Fix:** Always use `stickyTabs={true}`
 
 ---
 
 ## 📦 **Project Structure**
 
+```
 bertui-code/
 ├── src/
 │   ├── Code.js           # Main code block component
@@ -341,7 +362,7 @@ bertui-code/
 ├── dist/                 # Built files
 ├── package.json          # v1.0.1
 └── README.md            # You are here
-
+```
 
 ---
 
@@ -377,4 +398,3 @@ MIT © Pease Ernest
   </p>
 </div>
 ```
-
